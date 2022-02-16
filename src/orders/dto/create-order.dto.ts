@@ -1,7 +1,7 @@
 import { IsNumber, IsString } from "class-validator";
 
 export class CreateOrderDto {
-	@IsString()
+	@IsNumber()
 	readonly id: number;
 
 	@IsNumber()

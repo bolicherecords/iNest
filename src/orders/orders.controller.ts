@@ -1,4 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common';
+import { CreateOrderDto } from './dto/create-order.dto';
+import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrdersService } from './orders.service';
 
 
@@ -8,35 +10,36 @@ export class OrdersController {
   constructor(private readonly ordersService: OrdersService){}
 
   @Get()
-  findAll(@Query() paginationQuery){
-    const { limit, offset } = paginationQuery;
-    return `All Pizzas. Limit: ${limit}, Offset: ${offset}`;
+  public async findAll(@Query() paginationQuery){
+    // const { limit, offset } = paginationQuery;
+    // return `All Pizzas. Limit: ${limit}, Offset: ${offset}`;
+    return await this.ordersService.findAll();
   }
 
   @Get('cheese')
-  findAllWithCheese(){
+  public findAllWithCheese(){
     return 'All Pizzas with cheese nested'
   }
 
   @Get(':id')
-  findOne(@Param('id') id:string){
-    return `Pizza id N° ${id}`
+  public async findOne(@Param('id') id:number){
+    return await this.ordersService.findOne(id);
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  createOne(@Body() body){
+  public async createOne(@Body() orderDto: CreateOrderDto){
     // @Body('name') name: String
-    return body;
+    return await this.ordersService.createOne(orderDto);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() body) {
-    return `This action updates #${id} coffee`;
+  public async updateOne(@Param('id') id: number, @Body() orderDto: UpdateOrderDto) {
+    return await this.ordersService.updateOne(id, orderDto);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string) {
-    return `This action removes #${id} coffee`;
+  public async removeOne(@Param('id') id: number) {
+    return await this.ordersService.removeOne(id);
   }
 }
